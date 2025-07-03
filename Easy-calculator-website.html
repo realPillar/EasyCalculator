@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Easy Calculator - Calculate percentage changes and annualized growth rates with ease. Free online calculator tool.">
+    <meta name="keywords" content="calculator, percentage change, growth rate, financial calculator, online calculator">
+    <meta name="author" content="Easy Calculator">
+    <title>Easy Calculator - Percentage Change & Growth Rate Calculator</title>
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Easy Calculator - Online Calculator Tool">
+    <meta property="og:description" content="Calculate percentage changes and annualized growth rates easily with our free online calculator.">
+    <meta property="og:type" content="website">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4a90e2;
+            text-decoration: none;
+        }
+
+        .language-selector {
+            position: relative;
+        }
+
+        .language-btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .language-btn:hover {
+            background: #357abd;
+            transform: translateY(-1px);
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: none;
+            min-width: 150px;
+            z-index: 1001;
+        }
+
+        .language-dropdown.show {
+            display: block;
+        }
+
+        .language-option {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .language-option:last-child {
+            border-bottom: none;
+        }
+
+        .language-option:hover {
+            background: #f8f9fa;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem 0;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .nav-btn.active {
+            background: #4a90e2;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        .nav-btn:hover:not(.active) {
+            background: #f0f0f0;
+            transform: translateY(-1px);
+        }
+
+        main {
+            padding: 2rem 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .ad-space {
+            background: rgba(255, 255, 255, 0.7);
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.9rem;
+            min-height: 250px;
+            text-align: center;
+        }
+
+        .calculator-main {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .calculator-title {
+            font-size: 1.8rem;
+            color: #4a90e2;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        .btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .btn:hover {
+            background: #357abd;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4a90e2;
+            margin-bottom: 0.5rem;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .history {
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .history-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .history-item {
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .clear-history {
+            background: #dc3545;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .clear-history:hover {
+            background: #c82333;
+        }
+
+        .bottom-ad {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-content {
+                gap: 1rem;
+            }
+
+            .nav-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo" data-i18n="title">Easy Calculator</a>
+                <div class="language-selector">
+                    <button class="language-btn" id="languageBtn">English</button>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <div class="language-option" data-lang="en">English</div>
+                        <div class="language-option" data-lang="zh-cn">简体中文</div>
+                        <div class="language-option" data-lang="zh-tw">繁體中文</div>
+                        <div class="language-option" data-lang="fr">Français</div>
+                        <div class="language-option" data-lang="es">Español</div>
+                        <div class="language-option" data-lang="ru">Русский</div>
+                        <div class="language-option" data-lang="ar">العربية</div>
+                        <div class="language-option" data-lang="ja">日本語</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <button class="nav-btn active" data-page="home" data-i18n="nav.home">Home</button>
+                <button class="nav-btn" data-page="percentage" data-i18n="nav.percentage">Percentage Change</button>
+                <button class="nav-btn" data-page="growth" data-i18n="nav.growth">Growth Rate</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- Home Page -->
+            <div class="page active" id="home">
+                <div class="calculator-container">
+                    <div class="ad-space">
+                        <div>
+                            <div data-i18n="ad.space">Ad Space</div>
+                            <div style="font-size: 0.8rem; margin-top: 0.5rem;">200x250</div>
+                        </div>
+                    </div>
+                    
+                    <div class="calculator-main">
+                        <h1 class="calculator-title" data-i18n="home.welcome">Welcome to Easy Calculator</h1>
+                        <div class="instructions">
+                            <h3 data-i18n="home.features">Features:</h3>
+                            <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+                                <li data-i18n="home.feature1">Calculate percentage changes between two values</li>
+                                <li data-i18n="home.feature2">Calculate annualized growth rates with various scenarios</li>
+                            </ul>
+                        </div>
+                        <p data-i18n="home.instruction">Select a calculation type from the navigation menu above to get started.</p>
+                    </div>
+                    
+                    <div class="ad-space">
+                        <div>
+                            <div data-i18n="ad.space">Ad Space</div>
+                            <div style="font-size: 0.8rem; margin-top: 0.5rem;">200x250</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Percentage Change Calculator -->
+            <div class="page" id="percentage">
+                <div class="calculator-container">
+                    <div class="ad-space">
+                        <div>
+                            <div data-i18n="ad.space">Ad Space</div>
+                            <div style="font-size: 0.8rem; margin-top: 0.5rem;">200x250</div>
+                        </div>
+                    </div>
+                    
+                    <div class="calculator-main">
+                        <h1 class="calculator-title" data-i18n="percentage.title">Percentage Change Calculator</h1>
+                        <div class="instructions">
+                            <p data-i18n="percentage.instruction">Calculate the percentage change from value X to value Y. Formula: ((Y - X) / X) × 100%</p>
+                            <p data-i18n="percentage.example"><strong>Example:</strong> From 100 to 150 = +50.00%</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div class="form-col">
+                                    <label for="percentageX" data-i18n="percentage.initial">Initial Value (X):</label>
+                                    <input type="text" id="percentageX" placeholder="Enter initial value">
+                                </div>
+                                <div class="form-col">
+                                    <label for="percentageY" data-i18n="percentage.final">Final Value (Y):</label>
+                                    <input type="text" id="percentageY" placeholder="Enter final value">
+                                </div>
+                            </div>
+                            <button class="btn" onclick="calculatePercentage()" data-i18n="calculate">Calculate</button>
+                            <button class="btn btn-secondary" onclick="clearPercentageForm()" data-i18n="clear">Clear</button>
+                        </div>
+                        
+                        <div class="result" id="percentageResult">
+                            <div class="result-value" id="percentageValue"></div>
+                            <button class="btn copy-btn" onclick="copyResult('percentageValue')" data-i18n="copy">Copy Result</button>
+                        </div>
+                        
+                        <div class="error" id="percentageError"></div>
+                        
+                        <div class="history">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3 class="history-title" data-i18n="history.title">Calculation History</h3>
+                                <button class="btn clear-history" onclick="clearHistory('percentage')" data-i18n="history.clear">Clear History</button>
+                            </div>
+                            <div id="percentageHistory"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="ad-space">
+                        <div>
+                            <div data-i18n="ad.space">Ad Space</div>
+                            <div style="font-size: 0.8rem; margin-top: 0.5rem;">200x250</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bottom-ad ad-space" style="height: 90px; margin: 2rem auto;">
+                    <div>
+                        <div data-i18n="ad.space">Ad Space</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem;">728x90</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Growth Rate Calculator -->
+            <div class="page" id="growth">
+                <div class="calculator-container">
+                    <div class="ad-space">
+                        <div>
+                            <div data-i18n="ad.space">Ad Space</div>
+                            <div style="font-size: 0.8rem; margin-top: 0.5rem;">200x250</div>
+                        </div>
+                    </div>
+                    
+                    <div class="calculator-main">
+                        <h1 class="calculator-title" data-i18n="growth.title">Annualized Growth Rate Calculator</h1>
+                        <div class="instructions">
+                            <p data-i18n="growth.instruction">Calculate growth rates, future values, time periods, or present values using compound growth formulas.</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="calculationType" data-i18n="growth.type">Calculation Type:</label>
+                            <select id="calculationType" onchange="updateGrowthForm()">
+                                <option value="rate" data-i18n="growth.rate">Calculate Growth Rate</option>
+                                <option value="future" data-i18n="growth.future">Calculate Future Value</option>
+                                <option value="periods" data-i18n="growth.periods">Calculate Time Periods</option>
+                                <option value="present" data-i18n="growth.present">Calculate Present Value</option>
+                            </select>
+                        </div>
+                        
+                        <div id="growthForm">
+                            <!-- Dynamic form content will be inserted here -->
+                        </div>
+                        
+                        <div class="form-group">
+                            <button class="btn" onclick="calculateGrowth()" data-i18n="calculate">Calculate</button>
+                            <button class="btn btn-secondary" onclick="clearGrowthForm()" data-i18n="clear">Clear</button>
+                        </div>
+                        
+                        <div class="result" id="growthResult">
+                            <div class="result-value" id="growthValue"></div>
+                            <button class="btn copy-btn" onclick="copyResult('growthValue')" data-i18n="copy">Copy Result</button>
+                        </div>
+                        
+                        <div class="error" id="growthError"></div>
+                        
+                        <div class="history">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <h3 class="history-title" data-i18n="history.title">Calculation History</h3>
+                                <button class="btn clear-history" onclick="clearHistory('growth')" data-i18n="history.clear">Clear History</button>
+                            </div>
+                            <div id="growthHistory"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="ad-space">
+                        <div>
+                            <div data-i18n="ad.space">Ad Space</div>
+                            <div style="font-size: 0.8rem; margin-top: 0.5rem;">200x250</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bottom-ad ad-space" style="height: 90px; margin: 2rem auto;">
+                    <div>
+                        <div data-i18n="ad.space">Ad Space</div>
+                        <div style="font-size: 0.8rem; margin-top: 0.5rem;">728x90</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Internationalization
+        const i18n = {
+            en: {
+                title: "Easy Calculator",
+                nav: {
+                    home: "Home",
+                    percentage: "Percentage Change",
+                    growth: "Growth Rate"
+                },
+                home: {
+                    welcome: "Welcome to Easy Calculator",
+                    features: "Features:",
+                    feature1: "Calculate percentage changes between two values",
+                    feature2: "Calculate annualized growth rates with various scenarios",
+                    instruction: "Select a calculation type from the navigation menu above to get started."
+                },
+                percentage: {
+                    title: "Percentage Change Calculator",
+                    instruction: "Calculate the percentage change from value X to value Y. Formula: ((Y - X) / X) × 100%",
+                    example: "Example: From 100 to 150 = +50.00%",
+                    initial: "Initial Value (X):",
+                    final: "Final Value (Y):"
+                },
+                growth: {
+                    title: "Annualized Growth Rate Calculator",
+                    instruction: "Calculate growth rates, future values, time periods, or present values using compound growth formulas.",
+                    type: "Calculation Type:",
+                    rate: "Calculate Growth Rate",
+                    future: "Calculate Future Value",
+                    periods: "Calculate Time Periods",
+                    present: "Calculate Present Value",
+                    initialValue: "Initial Value:",
+                    finalValue: "Final Value:",
+                    growthRate: "Growth Rate (%):",
+                    discountRate: "Discount Rate (%):",
+                    periods: "Number of Periods:",
+                    presentValue: "Present Value:"
+                },
+                calculate: "Calculate",
+                clear: "Clear",
+                copy: "Copy Result",
+                history: {
+                    title: "Calculation History",
+                    clear: "Clear History"
+                },
+                ad: {
+                    space: "Ad Space"
+                },
+                errors: {
+                    enterNumber: "Please enter a number!",
+                    enterComplete: "Please enter complete content!",
+                    enterInteger: "Please enter an integer!",
+                    divideByZero: "Cannot divide by zero!"
+                }
+            },
+            "zh-cn": {
+                title: "简单计算",
+                nav: {
+                    home: "首页",
+                    percentage: "变化率计算",
+                    growth: "年化增长率"
+                },
+                home: {
+                    welcome: "欢迎使用简单计算",
+                    features: "功能特色：",
+                    feature1: "计算两个数值之间的百分比变化",
+                    feature2: "计算年化增长率的多种场景",
+                    instruction: "从上方导航菜单选择计算类型开始使用。"
+                },
+                percentage: {
+                    title: "变化率计算器",
+                    instruction: "计算从数值X到数值Y的百分比变化。公式：((Y - X) / X) × 100%",
+                    example: "示例：从100到150 = +50.00%",
+                    initial: "初始值 (X)：",
+                    final: "最终值 (Y)："
+                },
+                growth: {
+                    title: "年化增长率计算器",
+                    instruction: "使用复合增长公式计算增长率、未来值、时间周期或现值。",
+                    type: "计算类型：",
+                    rate: "计算增长率",
+                    future: "计算未来值",
+                    periods: "计算期数",
+                    present: "计算现值",
+                    initialValue: "起始值：",
+                    finalValue: "目标值：",
+                    growthRate: "增长率 (%)：",
+                    discountRate: "折现率 (%)：",
+                    periods: "期数",
+                    presentValue: "现值："
+                },
+                calculate: "计算",
+                clear: "清空",
+                copy: "复制结果",
+                history: {
+                    title: "计算历史",
+                    clear: "清空历史"
+                },
+                ad: {
+                    space: "广告位"
+                },
+                errors: {
+                    enterNumber: "请输入数字！",
+                    enterComplete: "请输入完整内容！",
+                    enterInteger: "请输入整数！",
+                    divideByZero: "不能除以零！"
+                }
+            },
+
+        };
+
+        let currentLang = 'en';
+        let history = {
+            percentage: [],
+            growth: []
+        };
+
+        // Language switching
+        document.getElementById('languageBtn').addEventListener('click', function() {
+            document.getElementById('languageDropdown').classList.toggle('show');
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const lang = this.dataset.lang;
+                setLanguage(lang);
+                document.getElementById('languageDropdown').classList.remove('show');
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.language-selector')) {
+                document.getElementById('languageDropdown').classList.remove('show');
+            }
+        });
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const langData = i18n[lang] || i18n['en'];
+            
+            // Update language button text
+            const langNames = {
+                'en': 'English',
+                'zh-cn': '简体中文',
+                'zh-tw': '繁體中文',
+                'fr': 'Français',
+                'es': 'Español',
+                'ru': 'Русский',
+                'ar': 'العربية',
+                'ja': '日本語'
+            };
+            document.getElementById('languageBtn').textContent = langNames[lang];
+            
+            // Update all i18n elements
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.dataset.i18n;
+                const keys = key.split('.');
+                let value = langData;
+                for (const k of keys) {
+                    value = value[k];
+                    if (!value) break;
+                }
+                if (value) {
+                    if (element.tagName === 'OPTION') {
+                        element.textContent = value;
+                    } else {
+                        element.textContent = value;
+                    }
+                }
+            });
+            
+            // Update form labels and placeholders
+            updateGrowthForm();
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const page = this.dataset.page;
+                showPage(page);
+                
+                // Update active nav button
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Utility functions
+        function parseNumber(str) {
+            if (!str || typeof str !== 'string') return null;
+            
+            // Remove spaces
+            str = str.trim();
+            
+            // Handle percentage
+            if (str.endsWith('%')) {
+                const numStr = str.slice(0, -1);
+                if (!/^-?\d*\.?\d+$/.test(numStr)) return null;
+                return parseFloat(numStr) / 100;
+            }
+            
+            // Check if it's a valid number
+            if (!/^-?\d*\.?\d*$/.test(str) || str === '' || str === '-') return null;
+            
+            const num = parseFloat(str);
+            return isNaN(num) ? null : num;
+        }
+
+        function truncateDecimals(num, decimals) {
+            const factor = Math.pow(10, decimals);
+            return Math.floor(num * factor) / factor;
+        }
+
+        function formatNumber(num, decimals = 4) {
+            if (Math.abs(num) > 1e11) return "Number too large";
+            return truncateDecimals(num, decimals).toFixed(decimals);
+        }
+
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            const langData = i18n[currentLang] || i18n['en'];
+            errorElement.textContent = langData.errors[message] || message;
+            errorElement.classList.add('show');
+            setTimeout(() => errorElement.classList.remove('show'), 5000);
+        }
+
+        function hideError(elementId) {
+            document.getElementById(elementId).classList.remove('show');
+        }
+
+        function addToHistory(type, calculation) {
+            if (!history[type]) history[type] = [];
+            history[type].unshift(calculation);
+            if (history[type].length > 5) {
+                history[type] = history[type].slice(0, 5);
+            }
+            updateHistoryDisplay(type);
+        }
+
+        function updateHistoryDisplay(type) {
+            const historyElement = document.getElementById(type + 'History');
+            if (!historyElement) return;
+            
+            historyElement.innerHTML = '';
+            history[type].forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.textContent = item;
+                historyElement.appendChild(div);
+            });
+        }
+
+        function clearHistory(type) {
+            history[type] = [];
+            updateHistoryDisplay(type);
+        }
+
+        function copyResult(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                // Visual feedback
+                const originalText = element.textContent;
+                element.textContent = 'Copied!';
+                setTimeout(() => {
+                    element.textContent = originalText;
+                }, 1000);
+            });
+        }
+
+        // Percentage Change Calculator
+        function calculatePercentage() {
+            hideError('percentageError');
+            
+            const xStr = document.getElementById('percentageX').value.trim();
+            const yStr = document.getElementById('percentageY').value.trim();
+            
+            if (!xStr || !yStr) {
+                showError('percentageError', 'enterComplete');
+                return;
+            }
+            
+            const x = parseNumber(xStr);
+            const y = parseNumber(yStr);
+            
+            if (x === null || y === null) {
+                showError('percentageError', 'enterNumber');
+                return;
+            }
+            
+            if (Math.abs(x) > 1e10 || Math.abs(y) > 1e10) {
+                showError('percentageError', 'Number too large');
+                return;
+            }
+            
+            if (x === 0) {
+                showError('percentageError', 'divideByZero');
+                return;
+            }
+            
+            const percentage = ((y - x) / x) * 100;
+            const result = (percentage >= 0 ? '+' : '') + formatNumber(percentage, 4) + '%';
+            
+            document.getElementById('percentageValue').textContent = result;
+            document.getElementById('percentageResult').classList.add('show');
+            
+            // Add to history
+            addToHistory('percentage', `${xStr} → ${yStr} = ${result}`);
+        }
+
+        function clearPercentageForm() {
+            document.getElementById('percentageX').value = '';
+            document.getElementById('percentageY').value = '';
+            document.getElementById('percentageResult').classList.remove('show');
+            hideError('percentageError');
+        }
+
+        // Growth Rate Calculator
+        function updateGrowthForm() {
+            const type = document.getElementById('calculationType').value;
+            const formContainer = document.getElementById('growthForm');
+            const langData = i18n[currentLang] || i18n['en'];
+            
+            let formHTML = '';
+            
+            switch (type) {
+                case 'rate':
+                    formHTML = `
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="growthInitial">${langData.growth.initialValue}</label>
+                                <input type="text" id="growthInitial" placeholder="Enter initial value">
+                            </div>
+                            <div class="form-col">
+                                <label for="growthFinal">${langData.growth.finalValue}</label>
+                                <input type="text" id="growthFinal" placeholder="Enter final value">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="growthPeriods">${langData.growth.periods}</label>
+                                <input type="text" id="growthPeriods" placeholder="Enter number of periods">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'future':
+                    formHTML = `
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="growthInitial">${langData.growth.initialValue}</label>
+                                <input type="text" id="growthInitial" placeholder="Enter initial value">
+                            </div>
+                            <div class="form-col">
+                                <label for="growthRate">${langData.growth.growthRate}</label>
+                                <input type="text" id="growthRate" placeholder="Enter growth rate">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="growthPeriods">${langData.growth.periods}</label>
+                                <input type="text" id="growthPeriods" placeholder="Enter number of periods">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'periods':
+                    formHTML = `
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="growthInitial">${langData.growth.initialValue}</label>
+                                <input type="text" id="growthInitial" placeholder="Enter initial value">
+                            </div>
+                            <div class="form-col">
+                                <label for="growthFinal">${langData.growth.finalValue}</label>
+                                <input type="text" id="growthFinal" placeholder="Enter final value">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="growthRate">${langData.growth.growthRate}</label>
+                                <input type="text" id="growthRate" placeholder="Enter growth rate">
+                            </div>
+                        </div>
+                    `;
+                    break;
+                case 'present':
+                    formHTML = `
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="growthFinal">${langData.growth.finalValue}</label>
+                                <input type="text" id="growthFinal" placeholder="Enter final value">
+                            </div>
+                            <div class="form-col">
+                                <label for="growthRate">${langData.growth.discountRate}</label>
+                                <input type="text" id="growthRate" placeholder="Enter discount rate">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="growthPeriods">${langData.growth.periods}</label>
+                                <input type="text" id="growthPeriods" placeholder="Enter number of periods">
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            formContainer.innerHTML = formHTML;
+        }
+
+        function calculateGrowth() {
+            hideError('growthError');
+            
+            const type = document.getElementById('calculationType').value;
+            let result = '';
+            
+            try {
+                switch (type) {
+                    case 'rate':
+                        result = calculateGrowthRate();
+                        break;
+                    case 'future':
+                        result = calculateFutureValue();
+                        break;
+                    case 'periods':
+                        result = calculatePeriods();
+                        break;
+                    case 'present':
+                        result = calculatePresentValue();
+                        break;
+                }
+                
+                if (result) {
+                    document.getElementById('growthValue').textContent = result.value;
+                    document.getElementById('growthResult').classList.add('show');
+                    addToHistory('growth', result.history);
+                }
+            } catch (error) {
+                showError('growthError', error.message);
+            }
+        }
+
+        function calculateGrowthRate() {
+            const initialStr = document.getElementById('growthInitial').value.trim();
+            const finalStr = document.getElementById('growthFinal').value.trim();
+            const periodsStr = document.getElementById('growthPeriods').value.trim();
+            
+            if (!initialStr || !finalStr || !periodsStr) {
+                throw new Error('enterComplete');
+            }
+            
+            const initial = parseNumber(initialStr);
+            const final = parseNumber(finalStr);
+            const periods = parseFloat(periodsStr);
+            
+            if (initial === null || final === null || isNaN(periods)) {
+                throw new Error('enterNumber');
+            }
+            
+            if (!Number.isInteger(periods) || periods <= 0) {
+                throw new Error('enterInteger');
+            }
+            
+            if (initial === 0) {
+                throw new Error('divideByZero');
+            }
+            
+            if (Math.abs(initial) > 1e11 || Math.abs(final) > 1e11) {
+                throw new Error('Number too large');
+            }
+            
+            const rate = (Math.pow(final / initial, 1 / periods) - 1) * 100;
+            const formattedRate = formatNumber(rate, 4) + '%';
+            
+            return {
+                value: formattedRate,
+                history: `Rate: ${initialStr} → ${finalStr} in ${periods} periods = ${formattedRate}`
+            };
+        }
+
+        function calculateFutureValue() {
+            const initialStr = document.getElementById('growthInitial').value.trim();
+            const rateStr = document.getElementById('growthRate').value.trim();
+            const periodsStr = document.getElementById('growthPeriods').value.trim();
+            
+            if (!initialStr || !rateStr || !periodsStr) {
+                throw new Error('enterComplete');
+            }
+            
+            const initial = parseNumber(initialStr);
+            let rate = parseFloat(rateStr);
+            const periods = parseFloat(periodsStr);
+            
+            if (initial === null || isNaN(rate) || isNaN(periods)) {
+                throw new Error('enterNumber');
+            }
+            
+            if (!Number.isInteger(periods) || periods <= 0) {
+                throw new Error('enterInteger');
+            }
+            
+            if (Math.abs(initial) > 1e11) {
+                throw new Error('Number too large');
+            }
+            
+            // Truncate rate to 4 decimal places
+            rate = truncateDecimals(rate, 4) / 100;
+            
+            const future = initial * Math.pow(1 + rate, periods);
+            const formattedFuture = formatNumber(future, 4);
+            
+            return {
+                value: formattedFuture,
+                history: `Future: ${initialStr} at ${rateStr}% for ${periods} periods = ${formattedFuture}`
+            };
+        }
+
+        function calculatePeriods() {
+            const initialStr = document.getElementById('growthInitial').value.trim();
+            const finalStr = document.getElementById('growthFinal').value.trim();
+            const rateStr = document.getElementById('growthRate').value.trim();
+            
+            if (!initialStr || !finalStr || !rateStr) {
+                throw new Error('enterComplete');
+            }
+            
+            const initial = parseNumber(initialStr);
+            const final = parseNumber(finalStr);
+            let rate = parseFloat(rateStr);
+            
+            if (initial === null || final === null || isNaN(rate)) {
+                throw new Error('enterNumber');
+            }
+            
+            if (initial === 0) {
+                throw new Error('divideByZero');
+            }
+            
+            if (Math.abs(initial) > 1e11 || Math.abs(final) > 1e11) {
+                throw new Error('Number too large');
+            }
+            
+            rate = truncateDecimals(rate, 4) / 100;
+            
+            if (rate <= -1) {
+                throw new Error('Invalid growth rate');
+            }
+            
+            const periods = Math.log(final / initial) / Math.log(1 + rate);
+            const roundedPeriods = Math.round(periods);
+            
+            return {
+                value: roundedPeriods.toString(),
+                history: `Periods: ${initialStr} → ${finalStr} at ${rateStr}% = ${roundedPeriods} periods`
+            };
+        }
+
+        function calculatePresentValue() {
+            const finalStr = document.getElementById('growthFinal').value.trim();
+            const rateStr = document.getElementById('growthRate').value.trim();
+            const periodsStr = document.getElementById('growthPeriods').value.trim();
+            
+            if (!finalStr || !rateStr || !periodsStr) {
+                throw new Error('enterComplete');
+            }
+            
+            const final = parseNumber(finalStr);
+            let rate = parseFloat(rateStr);
+            const periods = parseFloat(periodsStr);
+            
+            if (final === null || isNaN(rate) || isNaN(periods)) {
+                throw new Error('enterNumber');
+            }
+            
+            if (!Number.isInteger(periods) || periods < 0) {
+                throw new Error('enterInteger');
+            }
+            
+            if (Math.abs(final) > 1e11) {
+                throw new Error('Number too large');
+            }
+            
+            rate = truncateDecimals(rate, 4) / 100;
+            
+            const present = final / Math.pow(1 + rate, periods);
+            const formattedPresent = formatNumber(present, 4);
+            
+            return {
+                value: formattedPresent,
+                history: `Present: ${finalStr} at ${rateStr}% for ${periods} periods = ${formattedPresent}`
+            };
+        }
+
+        function clearGrowthForm() {
+            const inputs = document.querySelectorAll('#growthForm input');
+            inputs.forEach(input => input.value = '');
+            document.getElementById('growthResult').classList.remove('show');
+            hideError('growthError');
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const activePageId = document.querySelector('.page.active').id;
+                if (activePageId === 'percentage') {
+                    calculatePercentage();
+                } else if (activePageId === 'growth') {
+                    calculateGrowth();
+                }
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setLanguage('en');
+            updateGrowthForm();
+            
+            // Add language options for other languages
+            const additionalLanguages = {
+                'zh-tw': {
+                    title: "簡單計算",
+                    nav: {
+                        home: "首頁",
+                        percentage: "變化率計算",
+                        growth: "年化增長率"
+                    },
+                    home: {
+                        welcome: "歡迎使用簡單計算",
+                        features: "功能特色：",
+                        feature1: "計算兩個數值之間的百分比變化",
+                        feature2: "計算年化增長率的多種場景",
+                        instruction: "從上方導航選單選擇計算類型開始使用。"
+                    },
+                    percentage: {
+                        title: "變化率計算器",
+                        instruction: "計算從數值X到數值Y的百分比變化。公式：((Y - X) / X) × 100%",
+                        example: "示例：從100到150 = +50.00%",
+                        initial: "初始值 (X)：",
+                        final: "最終值 (Y)："
+                    },
+                    growth: {
+                        title: "年化增長率計算器",
+                        instruction: "使用複合增長公式計算增長率、未來值、時間週期或現值。",
+                        type: "計算類型：",
+                        rate: "計算增長率",
+                        future: "計算未來值",
+                        periods: "計算期數",
+                        present: "計算現值",
+                        initialValue: "起始值：",
+                        finalValue: "目標值：",
+                        growthRate: "增長率 (%)：",
+                        discountRate: "折現率 (%)：",
+                        periods: "期數",
+                        presentValue: "現值："
+                    },
+                    calculate: "計算",
+                    clear: "清空",
+                    copy: "複製結果",
+                    history: {
+                        title: "計算歷史",
+                        clear: "清空歷史"
+                    },
+                    ad: {
+                        space: "廣告位"
+                    },
+                    errors: {
+                        enterNumber: "請輸入數字！",
+                        enterComplete: "請輸入完整內容！",
+                        enterInteger: "請輸入整數！",
+                        divideByZero: "不能除以零！"
+                    }
+                },
+                fr: {
+                    title: "Calculatrice Faciles",
+                    nav: {
+                        home: "Accueil",
+                        percentage: "Changement de Pourcentage",
+                        growth: "Taux de Croissance"
+                    },
+                    home: {
+                        welcome: "Bienvenue dans Calculatrice Faciles",
+                        features: "Fonctionnalités:",
+                        feature1: "Calculer les changements de pourcentage entre deux valeurs",
+                        feature2: "Calculer les taux de croissance annualisés avec divers scénarios",
+                        instruction: "Sélectionnez un type de calcul dans le menu de navigation ci-dessus pour commencer."
+                    },
+                    percentage: {
+                        title: "Calculatrice de Changement de Pourcentage",
+                        instruction: "Calculer le changement de pourcentage de la valeur X à la valeur Y. Formule: ((Y - X) / X) × 100%",
+                        example: "Exemple: De 100 à 150 = +50.00%",
+                        initial: "Valeur Initiale (X):",
+                        final: "Valeur Finale (Y):"
+                    },
+                    growth: {
+                        title: "Calculatrice de Taux de Croissance Annualisé",
+                        instruction: "Calculer les taux de croissance, les valeurs futures, les périodes de temps ou les valeurs actuelles en utilisant les formules de croissance composée.",
+                        type: "Type de Calcul:",
+                        rate: "Calculer le Taux de Croissance",
+                        future: "Calculer la Valeur Future",
+                        periods: "Calculer les Périodes de Temps",
+                        present: "Calculer la Valeur Actuelle",
+                        initialValue: "Valeur Initiale:",
+                        finalValue: "Valeur Finale:",
+                        growthRate: "Taux de Croissance (%):",
+                        discountRate: "Taux d'Actualisation (%):",
+                        periods: "Nombre de Périodes",
+                        presentValue: "Valeur Actuelle:"
+                    },
+                    calculate: "Calculer",
+                    clear: "Effacer",
+                    copy: "Copier le Résultat",
+                    history: {
+                        title: "Historique des Calculs",
+                        clear: "Effacer l'Historique"
+                    },
+                    ad: {
+                        space: "Espace Publicitaire"
+                    },
+                    errors: {
+                        enterNumber: "Veuillez entrer un nombre!",
+                        enterComplete: "Veuillez entrer le contenu complet!",
+                        enterInteger: "Veuillez entrer un entier!",
+                        divideByZero: "Ne peut pas diviser par zéro!"
+                    }
+                },
+                es: {
+                    title: "Calculadora Fácil",
+                    nav: {
+                        home: "Inicio",
+                        percentage: "Cambio Porcentual",
+                        growth: "Tasa de Crecimiento"
+                    },
+                    home: {
+                        welcome: "Bienvenido a Calculadora Fácil",
+                        features: "Características:",
+                        feature1: "Calcular cambios porcentuales entre dos valores",
+                        feature2: "Calcular tasas de crecimiento anualizadas con varios escenarios",
+                        instruction: "Selecciona un tipo de cálculo del menú de navegación arriba para comenzar."
+                    },
+                    percentage: {
+                        title: "Calculadora de Cambio Porcentual",
+                        instruction: "Calcular el cambio porcentual del valor X al valor Y. Fórmula: ((Y - X) / X) × 100%",
+                        example: "Ejemplo: De 100 a 150 = +50.00%",
+                        initial: "Valor Inicial (X):",
+                        final: "Valor Final (Y):"
+                    },
+                    growth: {
+                        title: "Calculadora de Tasa de Crecimiento Anualizada",
+                        instruction: "Calcular tasas de crecimiento, valores futuros, períodos de tiempo o valores presentes usando fórmulas de crecimiento compuesto.",
+                        type: "Tipo de Cálculo:",
+                        rate: "Calcular Tasa de Crecimiento",
+                        future: "Calcular Valor Futuro",
+                        periods: "Calcular Períodos de Tiempo",
+                        present: "Calcular Valor Presente",
+                        initialValue: "Valor Inicial:",
+                        finalValue: "Valor Final:",
+                        growthRate: "Tasa de Crecimiento (%):",
+                        discountRate: "Tasa de Descuento (%):",
+                        periods: "Número de Períodos",
+                        presentValue: "Valor Presente:"
+                    },
+                    calculate: "Calcular",
+                    clear: "Limpiar",
+                    copy: "Copiar Resultado",
+                    history: {
+                        title: "Historial de Cálculos",
+                        clear: "Limpiar Historial"
+                    },
+                    ad: {
+                        space: "Espacio Publicitario"
+                    },
+                    errors: {
+                        enterNumber: "¡Por favor ingresa un número!",
+                        enterComplete: "¡Por favor ingresa contenido completo!",
+                        enterInteger: "¡Por favor ingresa un entero!",
+                        divideByZero: "¡No se puede dividir por cero!"
+                    }
+                },
+                ru: {
+                    title: "Простой Калькулятор",
+                    nav: {
+                        home: "Главная",
+                        percentage: "Процентное Изменение",
+                        growth: "Темп Роста"
+                    },
+                    home: {
+                        welcome: "Добро пожаловать в Простой Калькулятор",
+                        features: "Возможности:",
+                        feature1: "Расчет процентных изменений между двумя значениями",
+                        feature2: "Расчет годовых темпов роста с различными сценариями",
+                        instruction: "Выберите тип расчета из навигационного меню выше, чтобы начать."
+                    },
+                    percentage: {
+                        title: "Калькулятор Процентного Изменения",
+                        instruction: "Расчет процентного изменения от значения X к значению Y. Формула: ((Y - X) / X) × 100%",
+                        example: "Пример: С 100 до 150 = +50.00%",
+                        initial: "Начальное Значение (X):",
+                        final: "Конечное Значение (Y):"
+                    },
+                    growth: {
+                        title: "Калькулятор Годового Темпа Роста",
+                        instruction: "Расчет темпов роста, будущих значений, временных периодов или текущих значений с использованием формул сложного роста.",
+                        type: "Тип Расчета:",
+                        rate: "Рассчитать Темп Роста",
+                        future: "Рассчитать Будущее Значение",
+                        periods: "Рассчитать Периоды Времени",
+                        present: "Рассчитать Текущее Значение",
+                        initialValue: "Начальное Значение:",
+                        finalValue: "Конечное Значение:",
+                        growthRate: "Темп Роста (%):",
+                        discountRate: "Ставка Дисконтирования (%):",
+                        periods: "Количество Периодов",
+                        presentValue: "Текущее Значение:"
+                    },
+                    calculate: "Рассчитать",
+                    clear: "Очистить",
+                    copy: "Копировать Результат",
+                    history: {
+                        title: "История Расчетов",
+                        clear: "Очистить Историю"
+                    },
+                    ad: {
+                        space: "Рекламное Место"
+                    },
+                    errors: {
+                        enterNumber: "Пожалуйста, введите число!",
+                        enterComplete: "Пожалуйста, введите полное содержание!",
+                        enterInteger: "Пожалуйста, введите целое число!",
+                        divideByZero: "Нельзя делить на ноль!"
+                    }
+                },
+                ar: {
+                    title: "آلة حاسبة سهلة",
+                    nav: {
+                        home: "الرئيسية",
+                        percentage: "التغيير النسبي",
+                        growth: "معدل النمو"
+                    },
+                    home: {
+                        welcome: "مرحباً بك في آلة حاسبة سهلة",
+                        features: "المميزات:",
+                        feature1: "حساب التغييرات النسبية بين قيمتين",
+                        feature2: "حساب معدلات النمو السنوية مع سيناريوهات مختلفة",
+                        instruction: "اختر نوع الحساب من قائمة التنقل أعلاه للبدء."
+                    },
+                    percentage: {
+                        title: "آلة حاسبة التغيير النسبي",
+                        instruction: "حساب التغيير النسبي من القيمة X إلى القيمة Y. الصيغة: ((Y - X) / X) × 100%",
+                        example: "مثال: من 100 إلى 150 = +50.00%",
+                        initial: "القيمة الأولية (X):",
+                        final: "القيمة النهائية (Y):"
+                    },
+                    growth: {
+                        title: "آلة حاسبة معدل النمو السنوي",
+                        instruction: "حساب معدلات النمو والقيم المستقبلية والفترات الزمنية أو القيم الحالية باستخدام صيغ النمو المركب.",
+                        type: "نوع الحساب:",
+                        rate: "حساب معدل النمو",
+                        future: "حساب القيمة المستقبلية",
+                        periods: "حساب الفترات الزمنية",
+                        present: "حساب القيمة الحالية",
+                        initialValue: "القيمة الأولية:",
+                        finalValue: "القيمة النهائية:",
+                        growthRate: "معدل النمو (%):",
+                        discountRate: "معدل الخصم (%):",
+                        periods: "عدد الفترات",
+                        presentValue: "القيمة الحالية:"
+                    },
+                    calculate: "احسب",
+                    clear: "مسح",
+                    copy: "نسخ النتيجة",
+                    history: {
+                        title: "تاريخ الحسابات",
+                        clear: "مسح التاريخ"
+                    },
+                    ad: {
+                        space: "مساحة إعلانية"
+                    },
+                    errors: {
+                        enterNumber: "يرجى إدخال رقم!",
+                        enterComplete: "يرجى إدخال المحتوى كاملاً!",
+                        enterInteger: "يرجى إدخال رقم صحيح!",
+                        divideByZero: "لا يمكن القسمة على صفر!"
+                    }
+                },
+                ja: {
+                    title: "簡単計算機",
+                    nav: {
+                        home: "ホーム",
+                        percentage: "変化率計算",
+                        growth: "成長率"
+                    },
+                    home: {
+                        welcome: "簡単計算機へようこそ",
+                        features: "機能:",
+                        feature1: "2つの値の間の変化率を計算",
+                        feature2: "様々なシナリオでの年間成長率を計算",
+                        instruction: "上のナビゲーションメニューから計算タイプを選択して開始してください。"
+                    },
+                    percentage: {
+                        title: "変化率計算機",
+                        instruction: "値Xから値Yへの変化率を計算します。公式: ((Y - X) / X) × 100%",
+                        example: "例: 100から150へ = +50.00%",
+                        initial: "初期値 (X):",
+                        final: "最終値 (Y):"
+                    },
+                    growth: {
+                        title: "年間成長率計算機",
+                        instruction: "複利成長公式を使用して成長率、将来価値、期間、または現在価値を計算します。",
+                        type: "計算タイプ:",
+                        rate: "成長率を計算",
+                        future: "将来価値を計算",
+                        periods: "期間を計算",
+                        present: "現在価値を計算",
+                        initialValue: "初期値:",
+                        finalValue: "最終値:",
+                        growthRate: "成長率 (%):",
+                        discountRate: "割引率 (%):",
+                        periods: "期間数",
+                        presentValue: "現在価値:"
+                    },
+                    calculate: "計算",
+                    clear: "クリア",
+                    copy: "結果をコピー",
+                    history: {
+                        title: "計算履歴",
+                        clear: "履歴をクリア"
+                    },
+                    ad: {
+                        space: "広告スペース"
+                    },
+                    errors: {
+                        enterNumber: "数字を入力してください！",
+                        enterComplete: "完全な内容を入力してください！",
+                        enterInteger: "整数を入力してください！",
+                        divideByZero: "ゼロで割ることはできません！"
+                    }
+                }
+            };
+            
+            // Merge additional languages
+            Object.assign(i18n, additionalLanguages);
+        });
+    </script>
+</body>
+</html>
