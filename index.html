@@ -206,6 +206,30 @@
             font-size: 0.9rem;
             color: #666;
         }
+        .formula-box {
+            background: #e8f4f8;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            font-size: 0.95rem;
+            color: #0c5460;
+        }
+
+        .formula-title {
+            font-weight: bold;
+            color: #155724;
+            margin-bottom: 0.5rem;
+        }
+
+        .formula-description {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
 
         .form-group {
             margin-bottom: 1.5rem;
@@ -385,18 +409,18 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <a href="#" class="logo" data-i18n="title">Easy Calculator</a>
+                <a href="#" class="logo" data-i18n="title">DeltaRate</a>
                 <div class="language-selector">
                     <button class="language-btn" id="languageBtn">English</button>
                     <div class="language-dropdown" id="languageDropdown">
                         <div class="language-option" data-lang="en">English</div>
-                        <div class="language-option" data-lang="zh-cn">简体中文</div>
-                        <div class="language-option" data-lang="zh-tw">繁體中文</div>
                         <div class="language-option" data-lang="fr">Français</div>
                         <div class="language-option" data-lang="es">Español</div>
                         <div class="language-option" data-lang="ru">Русский</div>
                         <div class="language-option" data-lang="ar">العربية</div>
                         <div class="language-option" data-lang="ja">日本語</div>
+                        <div class="language-option" data-lang="zh-cn">简体中文</div>
+                        <div class="language-option" data-lang="zh-tw">繁體中文</div>
                     </div>
                 </div>
             </div>
@@ -426,7 +450,7 @@
                     </div>
                     
                     <div class="calculator-main">
-                        <h1 class="calculator-title" data-i18n="home.welcome">Welcome to Easy Calculator</h1>
+                        <h1 class="calculator-title" data-i18n="home.welcome">Welcome to DeltaRate Calculator</h1>
                         <div class="instructions">
                             <h3 data-i18n="home.features">Features:</h3>
                             <ul style="margin-left: 1rem; margin-top: 0.5rem;">
@@ -583,15 +607,15 @@
         // Internationalization
         const i18n = {
             en: {
-                title: "Easy Calculator",
+                title: "DeltaRate",
                 nav: {
                     home: "Home",
                     percentage: "Percentage Change",
                     growth: "Growth Rate"
                 },
                 home: {
-                    welcome: "Welcome to Easy Calculator",
-                    features: "Features:",
+                    welcome: "Welcome to DeltaRate Calculator",
+                    features: "Major Functions:",
                     feature1: "Calculate percentage changes between two values",
                     feature2: "Calculate annualized growth rates with various scenarios",
                     instruction: "Select a calculation type from the navigation menu above to get started."
@@ -616,7 +640,29 @@
                     growthRate: "Growth Rate (%):",
                     discountRate: "Discount Rate (%):",
                     periods: "Number of Periods:",
-                    presentValue: "Present Value:"
+                    presentValue: "Present Value:",
+                    formulas: {
+                        rate: {
+                            title: "Formula:",
+                            formula: "Growth Rate = ((Final Value / Initial Value)^(1/Periods) - 1) × 100%",
+                            description: "Calculate the compound annual growth rate between two values over a given period."
+                        },
+                        future: {
+                            title: "Formula:",
+                            formula: "Future Value = Initial Value × (1 + Growth Rate)^Periods",
+                            description: "Calculate the future value based on initial value, growth rate, and time periods."
+                        },
+                        periods: {
+                            title: "Formula:",
+                            formula: "Periods = ln(Final Value / Initial Value) / ln(1 + Growth Rate)",
+                            description: "Calculate the number of periods required to reach a target value."
+                        },
+                        present: {
+                            title: "Formula:",
+                            formula: "Present Value = Future Value / (1 + Discount Rate)^Periods",
+                            description: "Calculate the present value of a future amount using discount rate."
+                        }
+                    }
                 },
                 calculate: "Calculate",
                 clear: "Clear",
@@ -636,15 +682,15 @@
                 }
             },
             "zh-cn": {
-                title: "简单计算",
+                title: "变化率计算器",
                 nav: {
                     home: "首页",
                     percentage: "变化率计算",
                     growth: "年化增长率"
                 },
                 home: {
-                    welcome: "欢迎使用简单计算",
-                    features: "功能特色：",
+                    welcome: "欢迎使用变化率计算器",
+                    features: "主要功能：",
                     feature1: "计算两个数值之间的百分比变化",
                     feature2: "计算年化增长率的多种场景",
                     instruction: "从上方导航菜单选择计算类型开始使用。"
@@ -669,7 +715,29 @@
                     growthRate: "增长率 (%)：",
                     discountRate: "折现率 (%)：",
                     periods: "期数",
-                    presentValue: "现值："
+                    presentValue: "现值：",
+                    formulas: {
+                        rate: {
+                            title: "公式：",
+                            formula: "增长率 = ((最终值 / 起始值)^(1/期数) - 1) × 100%",
+                            description: "计算两个数值在给定时间段内的复合年增长率。"
+                        },
+                        future: {
+                            title: "公式：",
+                            formula: "未来值 = 起始值 × (1 + 增长率)^期数",
+                            description: "根据起始值、增长率和时间期数计算未来值。"
+                        },
+                        periods: {
+                            title: "公式：",
+                            formula: "期数 = ln(最终值 / 起始值) / ln(1 + 增长率)",
+                            description: "计算达到目标值所需的期数。"
+                        },
+                        present: {
+                            title: "公式：",
+                            formula: "现值 = 未来值 / (1 + 折现率)^期数",
+                            description: "使用折现率计算未来金额的现值。"
+                        }
+                    }
                 },
                 calculate: "计算",
                 clear: "清空",
@@ -724,13 +792,13 @@
             // Update language button text
             const langNames = {
                 'en': 'English',
-                'zh-cn': '简体中文',
-                'zh-tw': '繁體中文',
                 'fr': 'Français',
                 'es': 'Español',
                 'ru': 'Русский',
                 'ar': 'العربية',
-                'ja': '日本語'
+                'ja': '日本語',
+                'zh-cn': '简体中文',
+                'zh-tw': '繁體中文'
             };
             document.getElementById('languageBtn').textContent = langNames[lang];
             
@@ -916,6 +984,11 @@
             switch (type) {
                 case 'rate':
                     formHTML = `
+                        <div class="formula-box">
+                            <div class="formula-title">${langData.growth.formulas.rate.title}</div>
+                            <div>${langData.growth.formulas.rate.formula}</div>
+                            <div class="formula-description">${langData.growth.formulas.rate.description}</div>
+                        </div>
                         <div class="form-row">
                             <div class="form-col">
                                 <label for="growthInitial">${langData.growth.initialValue}</label>
@@ -936,6 +1009,11 @@
                     break;
                 case 'future':
                     formHTML = `
+                        <div class="formula-box">
+                            <div class="formula-title">${langData.growth.formulas.future.title}</div>
+                            <div>${langData.growth.formulas.future.formula}</div>
+                            <div class="formula-description">${langData.growth.formulas.future.description}</div>
+                        </div>
                         <div class="form-row">
                             <div class="form-col">
                                 <label for="growthInitial">${langData.growth.initialValue}</label>
@@ -956,6 +1034,11 @@
                     break;
                 case 'periods':
                     formHTML = `
+                        <div class="formula-box">
+                            <div class="formula-title">${langData.growth.formulas.periods.title}</div>
+                            <div>${langData.growth.formulas.periods.formula}</div>
+                            <div class="formula-description">${langData.growth.formulas.periods.description}</div>
+                        </div>
                         <div class="form-row">
                             <div class="form-col">
                                 <label for="growthInitial">${langData.growth.initialValue}</label>
@@ -976,6 +1059,11 @@
                     break;
                 case 'present':
                     formHTML = `
+                        <div class="formula-box">
+                            <div class="formula-title">${langData.growth.formulas.present.title}</div>
+                            <div>${langData.growth.formulas.present.formula}</div>
+                            <div class="formula-description">${langData.growth.formulas.present.description}</div>
+                        </div>
                         <div class="form-row">
                             <div class="form-col">
                                 <label for="growthFinal">${langData.growth.finalValue}</label>
@@ -1209,7 +1297,7 @@
             // Add language options for other languages
             const additionalLanguages = {
                 'zh-tw': {
-                    title: "簡單計算",
+                    title: "變化率計算器",
                     nav: {
                         home: "首頁",
                         percentage: "變化率計算",
@@ -1242,7 +1330,29 @@
                         growthRate: "增長率 (%)：",
                         discountRate: "折現率 (%)：",
                         periods: "期數",
-                        presentValue: "現值："
+                        presentValue: "現值：",
+                        formulas: {
+                            rate: {
+                                title: "公式：",
+                                formula: "增長率 = ((最終值 / 起始值)^(1/期數) - 1) × 100%",
+                                description: "計算兩個數值在給定時間段內的複合年增長率。"
+                            },
+                            future: {
+                                title: "公式：",
+                                formula: "未來值 = 起始值 × (1 + 增長率)^期數",
+                                description: "根據起始值、增長率和時間期數計算未來值。"
+                            },
+                            periods: {
+                                title: "公式：",
+                                formula: "期數 = ln(最終值 / 起始值) / ln(1 + 增長率)",
+                                description: "計算達到目標值所需的期數。"
+                            },
+                            present: {
+                                title: "公式：",
+                                formula: "現值 = 未來值 / (1 + 折現率)^期數",
+                                description: "使用折現率計算未來金額的現值。"
+                            }
+                        }
                     },
                     calculate: "計算",
                     clear: "清空",
@@ -1262,14 +1372,14 @@
                     }
                 },
                 fr: {
-                    title: "Calculatrice Faciles",
+                    title: "DeltaTaux",
                     nav: {
                         home: "Accueil",
                         percentage: "Changement de Pourcentage",
                         growth: "Taux de Croissance"
                     },
                     home: {
-                        welcome: "Bienvenue dans Calculatrice Faciles",
+                        welcome: "Bienvenue dans DeltaTaux Calculatrice",
                         features: "Fonctionnalités:",
                         feature1: "Calculer les changements de pourcentage entre deux valeurs",
                         feature2: "Calculer les taux de croissance annualisés avec divers scénarios",
@@ -1295,7 +1405,29 @@
                         growthRate: "Taux de Croissance (%):",
                         discountRate: "Taux d'Actualisation (%):",
                         periods: "Nombre de Périodes",
-                        presentValue: "Valeur Actuelle:"
+                        presentValue: "Valeur Actuelle:",
+                        formulas: {
+                            rate: {
+                                title: "Formule :",
+                                formula: "Taux de Croissance = ((Valeur Finale / Valeur Initiale)^(1/Périodes) - 1) × 100%",
+                                description: "Calculer le taux de croissance annuel composé entre deux valeurs sur une période donnée."
+                            },
+                            future: {
+                                title: "Formule :",
+                                formula: "Valeur Future = Valeur Initiale × (1 + Taux de Croissance)^Périodes",
+                                description: "Calculer la valeur future basée sur la valeur initiale, le taux de croissance et les périodes."
+                            },
+                            periods: {
+                                title: "Formule :",
+                                formula: "Périodes = ln(Valeur Finale / Valeur Initiale) / ln(1 + Taux de Croissance)",
+                                description: "Calculer le nombre de périodes nécessaires pour atteindre une valeur cible."
+                            },
+                            present: {
+                                title: "Formule :",
+                                formula: "Valeur Actuelle = Valeur Future / (1 + Taux d'Actualisation)^Périodes",
+                                description: "Calculer la valeur actuelle d'un montant futur en utilisant le taux d'actualisation."
+                            }
+                        }
                     },
                     calculate: "Calculer",
                     clear: "Effacer",
@@ -1315,14 +1447,14 @@
                     }
                 },
                 es: {
-                    title: "Calculadora Fácil",
+                    title: "DeltaCambio",
                     nav: {
                         home: "Inicio",
                         percentage: "Cambio Porcentual",
                         growth: "Tasa de Crecimiento"
                     },
                     home: {
-                        welcome: "Bienvenido a Calculadora Fácil",
+                        welcome: "Bienvenido a DeltaCambio Calculadora",
                         features: "Características:",
                         feature1: "Calcular cambios porcentuales entre dos valores",
                         feature2: "Calcular tasas de crecimiento anualizadas con varios escenarios",
@@ -1348,7 +1480,29 @@
                         growthRate: "Tasa de Crecimiento (%):",
                         discountRate: "Tasa de Descuento (%):",
                         periods: "Número de Períodos",
-                        presentValue: "Valor Presente:"
+                        presentValue: "Valor Presente:",
+                        formulas: {
+                            rate: {
+                                title: "Fórmula:",
+                                formula: "Tasa de Crecimiento = ((Valor Final / Valor Inicial)^(1/Períodos) - 1) × 100%",
+                                description: "Calcular la tasa de crecimiento anual compuesta entre dos valores durante un período dado."
+                            },
+                            future: {
+                                title: "Fórmula:",
+                                formula: "Valor Futuro = Valor Inicial × (1 + Tasa de Crecimiento)^Períodos",
+                                description: "Calcular el valor futuro basado en el valor inicial, la tasa de crecimiento y los períodos."
+                            },
+                            periods: {
+                                title: "Fórmula:",
+                                formula: "Períodos = ln(Valor Final / Valor Inicial) / ln(1 + Tasa de Crecimiento)",
+                                description: "Calcular el número de períodos necesarios para alcanzar un valor objetivo."
+                            },
+                            present: {
+                                title: "Fórmula:",
+                                formula: "Valor Presente = Valor Futuro / (1 + Tasa de Descuento)^Períodos",
+                                description: "Calcular el valor presente de una cantidad futura usando la tasa de descuento."
+                            }
+                        }
                     },
                     calculate: "Calcular",
                     clear: "Limpiar",
@@ -1368,14 +1522,14 @@
                     }
                 },
                 ru: {
-                    title: "Простой Калькулятор",
+                    title: "ДельтаРейт",
                     nav: {
                         home: "Главная",
                         percentage: "Процентное Изменение",
                         growth: "Темп Роста"
                     },
                     home: {
-                        welcome: "Добро пожаловать в Простой Калькулятор",
+                        welcome: "Добро пожаловать в ДельтаРейт",
                         features: "Возможности:",
                         feature1: "Расчет процентных изменений между двумя значениями",
                         feature2: "Расчет годовых темпов роста с различными сценариями",
@@ -1401,7 +1555,29 @@
                         growthRate: "Темп Роста (%):",
                         discountRate: "Ставка Дисконтирования (%):",
                         periods: "Количество Периодов",
-                        presentValue: "Текущее Значение:"
+                        presentValue: "Текущее Значение:",
+                        formulas: {
+                            rate: {
+                                title: "Формула:",
+                                formula: "Темп Роста = ((Конечное Значение / Начальное Значение)^(1/Периоды) - 1) × 100%",
+                                description: "Рассчитать сложный годовой темп роста между двумя значениями за данный период."
+                            },
+                            future: {
+                                title: "Формула:",
+                                formula: "Будущая Стоимость = Начальное Значение × (1 + Темп Роста)^Периоды",
+                                description: "Рассчитать будущую стоимость на основе начального значения, темпа роста и периодов."
+                            },
+                            periods: {
+                                title: "Формула:",
+                                formula: "Периоды = ln(Конечное Значение / Начальное Значение) / ln(1 + Темп Роста)",
+                                description: "Рассчитать количество периодов, необходимых для достижения целевого значения."
+                            },
+                            present: {
+                                title: "Формула:",
+                                formula: "Текущая Стоимость = Будущая Стоимость / (1 + Ставка Дисконтирования)^Периоды",
+                                description: "Рассчитать текущую стоимость будущей суммы, используя ставку дисконтирования."
+                            }
+                        }
                     },
                     calculate: "Рассчитать",
                     clear: "Очистить",
@@ -1454,7 +1630,29 @@
                         growthRate: "معدل النمو (%):",
                         discountRate: "معدل الخصم (%):",
                         periods: "عدد الفترات",
-                        presentValue: "القيمة الحالية:"
+                        presentValue: "القيمة الحالية:",
+                        formulas: {
+                            rate: {
+                                title: "الصيغة:",
+                                formula: "معدل النمو = ((القيمة النهائية / القيمة الأولية)^(1/الفترات) - 1) × 100%",
+                                description: "حساب معدل النمو السنوي المركب بين قيمتين خلال فترة معينة."
+                            },
+                            future: {
+                                title: "الصيغة:",
+                                formula: "القيمة المستقبلية = القيمة الأولية × (1 + معدل النمو)^الفترات",
+                                description: "حساب القيمة المستقبلية بناءً على القيمة الأولية ومعدل النمو والفترات."
+                            },
+                            periods: {
+                                title: "الصيغة:",
+                                formula: "الفترات = ln(القيمة النهائية / القيمة الأولية) / ln(1 + معدل النمو)",
+                                description: "حساب عدد الفترات المطلوبة للوصول إلى قيمة مستهدفة."
+                            },
+                            present: {
+                                title: "الصيغة:",
+                                formula: "القيمة الحالية = القيمة المستقبلية / (1 + معدل الخصم)^الفترات",
+                                description: "حساب القيمة الحالية لمبلغ مستقبلي باستخدام معدل الخصم."
+                            }
+                        }
                     },
                     calculate: "احسب",
                     clear: "مسح",
@@ -1474,14 +1672,14 @@
                     }
                 },
                 ja: {
-                    title: "簡単計算機",
+                    title: "デルタレート",
                     nav: {
                         home: "ホーム",
                         percentage: "変化率計算",
                         growth: "成長率"
                     },
                     home: {
-                        welcome: "簡単計算機へようこそ",
+                        welcome: "デルタレートへようこそ",
                         features: "機能:",
                         feature1: "2つの値の間の変化率を計算",
                         feature2: "様々なシナリオでの年間成長率を計算",
@@ -1507,7 +1705,29 @@
                         growthRate: "成長率 (%):",
                         discountRate: "割引率 (%):",
                         periods: "期間数",
-                        presentValue: "現在価値:"
+                        presentValue: "現在価値:",
+                        formulas: {
+                            rate: {
+                                title: "公式：",
+                                formula: "成長率 = ((最終値 / 初期値)^(1/期間) - 1) × 100%",
+                                description: "与えられた期間での二つの値の間の複合年間成長率を計算します。"
+                            },
+                            future: {
+                                title: "公式：",
+                                formula: "将来価値 = 初期値 × (1 + 成長率)^期間",
+                                description: "初期値、成長率、期間に基づいて将来価値を計算します。"
+                            },
+                            periods: {
+                                title: "公式：",
+                                formula: "期間 = ln(最終値 / 初期値) / ln(1 + 成長率)",
+                                description: "目標値に到達するために必要な期間数を計算します。"
+                            },
+                            present: {
+                                title: "公式：",
+                                formula: "現在価値 = 将来価値 / (1 + 割引率)^期間",
+                                description: "割引率を使用して将来の金額の現在価値を計算します。"
+                            }
+                        }
                     },
                     calculate: "計算",
                     clear: "クリア",
